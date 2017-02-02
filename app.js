@@ -1,3 +1,13 @@
+function emptyNodeById (id) {
+  var node = document.getElementById(id);
+  if (!node) {
+    return;
+  }
+  while (node.hasChildNodes()) {
+    node.removeChild(node.firstChild);
+  }
+}
+
 function Sheet (appendAt, rowCount, columnCount) {
   var currentColumnCount = columnCount;
   var currentRowCount = rowCount;
@@ -47,14 +57,14 @@ function Sheet (appendAt, rowCount, columnCount) {
     return rowDOM;
   }
 
-  var sheetDOM = document.createElement('div');
-  sheetDOM.id = "sheet";
+  var sheetElement = document.createElement('div');
+  sheetElement.id = "sheet";
   for (i = 0; i < currentRowCount; i++) {
-    sheetDOM.appendChild(makeRowAtIndex(i));
+    sheetElement.appendChild(makeRowAtIndex(i));
   }
 
   var container = document.querySelector(appendAt);
-  container.appendChild(sheetDOM);
+  container.appendChild(sheetElement);
 
   var sheetParent = document.querySelector('#sheet');
 
