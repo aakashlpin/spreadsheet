@@ -8,6 +8,15 @@ function emptyNodeById (id) {
   }
 }
 
+function create2DArray(m, n) {
+  var arr = new Array(m);
+  for (var i = 0; i< m ; i++) {
+    arr[i] = new Array(n);
+  }
+
+  return arr;
+}
+
 function Sheet (appendAt, rowCount, columnCount) {
   var currentColumnCount = columnCount;
   var currentRowCount = rowCount;
@@ -15,18 +24,8 @@ function Sheet (appendAt, rowCount, columnCount) {
   var SHEET_ID_SELECTOR = '#sheet';
   var sheetElement = document.createElement('div');
   sheetElement.id = SHEET_ID;
-  var i;
 
-  function initializeData () {
-    var arr = new Array(rowCount);
-    for (var i = 0; i< rowCount ; i++) {
-      arr[i] = new Array(columnCount);
-    }
-
-    return arr;
-  }
-
-  var sheetData = initializeData();
+  var sheetData = create2DArray(rowCount, columnCount);
 
   function getCellId (x, y) {
     return 'cell-' + x + '-' + y;
@@ -46,14 +45,13 @@ function Sheet (appendAt, rowCount, columnCount) {
     return cell;
   }
 
-  function makeRowAtIndex (i) {
-    var j;
+  function makeRowAtIndex (index) {
     var rowDOM = document.createElement('div');
     rowDOM.className="row";
-    rowDOM.id = getRowId(i);
+    rowDOM.id = getRowId(index);
 
-    for (j = 0; j < currentColumnCount; j++) {
-      var cell = makeCellAtPos(i, j);
+    for (var j = 0; j < currentColumnCount; j++) {
+      var cell = makeCellAtPos(index, j);
       rowDOM.appendChild(cell);
     }
 
@@ -61,16 +59,19 @@ function Sheet (appendAt, rowCount, columnCount) {
   }
 
   function populateSheetElement () {
-    for (i = 0; i < currentRowCount; i++) {
+    for (var i = 0; i < currentRowCount; i++) {
       sheetElement.appendChild(makeRowAtIndex(i));
     }
   }
 
+  // populate the sheet's dom with rows
   populateSheetElement();
 
+  // initialize the container with sheet's dom
   var container = document.querySelector(appendAt);
   container.appendChild(sheetElement);
 
+  // on change of any input within the sheet, sync with sheetData
   document.querySelector(SHEET_ID_SELECTOR).addEventListener('change', function(e) {
     var target = e.target;
     var pos = target.id.split('-');
@@ -83,11 +84,14 @@ function Sheet (appendAt, rowCount, columnCount) {
     console.log('sheet data written at ' + posX + ', ' + posY);
   })
 
+  // utility method to regenerateSheet
   function regenerateSheet () {
     emptyNodeById('sheet');
     populateSheetElement();
   }
 
+
+  // Public APIs
   this.addRow = function (index) {
     console.log('addRow at ' + index);
     currentRowCount += 1;
@@ -98,9 +102,10 @@ function Sheet (appendAt, rowCount, columnCount) {
     regenerateSheet();
   }
 
+  //
   this.addColumn = function (index) {
     console.log('addColumn at ' + index);
-    for (i = 0; i < currentRowCount; i++) {
+    for (var i = 0; i < currentRowCount; i++) {
       // init an empty value in every row at index
       sheetData[i].splice(index, 0, '');
     }
@@ -121,7 +126,7 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   this.removeColumn = function (index) {
     console.log('removeColumn at ' + index);
-    for (i = 0; i < currentRowCount; i++) {
+    for (var i = 0; i < currentRowCount; i++) {
       sheetData[i].splice(index, 1);
     }
 
