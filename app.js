@@ -11,7 +11,8 @@ function emptyNodeById (id) {
 function Sheet (appendAt, rowCount, columnCount) {
   var currentColumnCount = columnCount;
   var currentRowCount = rowCount;
-
+  var sheetElement = document.createElement('div');
+  sheetElement.id = "sheet";
   var i;
 
   function initializeData () {
@@ -57,8 +58,6 @@ function Sheet (appendAt, rowCount, columnCount) {
     return rowDOM;
   }
 
-  var sheetElement = document.createElement('div');
-  sheetElement.id = "sheet";
   for (i = 0; i < currentRowCount; i++) {
     sheetElement.appendChild(makeRowAtIndex(i));
   }
@@ -79,6 +78,14 @@ function Sheet (appendAt, rowCount, columnCount) {
 
     console.log('sheet data written at ' + posX + ', ' + posY);
   })
+
+  function regenerateSheet () {
+    emptyNodeById('sheet');
+    var sheet = document.querySelector('#sheet');
+    for (i = 0; i < currentRowCount; i++) {
+      sheetElement.appendChild(makeRowAtIndex(i));
+    }
+  }
 
   this.addRow = function (index) {
     console.log('addRow at ' + index);
@@ -144,6 +151,7 @@ function Sheet (appendAt, rowCount, columnCount) {
 
     sheetData.sort(sortIt);
     console.log(sheetData);
+    regenerateSheet();
   }
 }
 
@@ -180,8 +188,9 @@ removeColumnForm.addEventListener('submit', function (e) {
 var sortColumnForm = document.querySelector('#sortColumnAtIndexForm');
 sortColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#sortColumnAtIndex').value;
-  sheet.sortColumn(Number(atIndex));
+  // var atIndex = document.querySelector('#sortColumnAtIndex').value;
+  // sheet.sortColumn(Number(atIndex));
+  sheet.sortColumn();
 })
 
 
