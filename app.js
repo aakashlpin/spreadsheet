@@ -129,6 +129,10 @@ function Sheet (appendAt, rowCount, columnCount) {
     rowRef.remove();
 
     currentRowCount -= 1;
+
+    sheetData.splice(index, 1);
+
+    regenerateSheet();
   }
 
   this.removeColumn = function (index) {
@@ -136,9 +140,12 @@ function Sheet (appendAt, rowCount, columnCount) {
     for (i = 0; i < currentRowCount; i++) {
       var cellRef = document.querySelector('#' + getCellId(i, index));
       cellRef.remove();
+      sheetData[i].splice(index, 1);
     }
 
     currentColumnCount -= 1;
+
+    regenerateSheet();
   }
 
   function sortIt(a, b) {
