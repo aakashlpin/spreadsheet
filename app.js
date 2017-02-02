@@ -128,13 +128,6 @@ function Sheet (appendAt, rowCount, columnCount) {
     regenerateSheet();
   }
 
-  function sortIt(a, b) {
-    if (a[0] === b[0]) {
-      return 0;
-    }
-    return (a[0] < b[0]) ? -1 : 1;
-  }
-
   this.sortColumn = function (index) {
     /**
      * 20 XSY      10 ABC
@@ -142,7 +135,14 @@ function Sheet (appendAt, rowCount, columnCount) {
      * 30 SUDO     30 SUDO
      */
     console.log('sortColumn at ' + index);
-    sheetData.sort(sortIt);
+
+    sheetData.sort(function (a, b) {
+      if (a[index] === b[index]) {
+        return 0;
+      }
+      return (a[index] < b[index]) ? -1 : 1;
+    });
+
     regenerateSheet();
   }
 }
@@ -180,9 +180,8 @@ removeColumnForm.addEventListener('submit', function (e) {
 var sortColumnForm = document.querySelector('#sortColumnAtIndexForm');
 sortColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  // var atIndex = document.querySelector('#sortColumnAtIndex').value;
-  // sheet.sortColumn(Number(atIndex));
-  sheet.sortColumn();
+  var atIndex = document.querySelector('#sortColumnAtIndex').value;
+  sheet.sortColumn(Number(atIndex));
 })
 
 
