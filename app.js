@@ -142,12 +142,7 @@ function Sheet (appendAt, rowCount, columnCount) {
      * 30 SUDO     30 SUDO
      */
     console.log('sortColumn at ' + index);
-    // could store the values in json, sort that
-    // then regenerate the HTML?
-    //
-
     sheetData.sort(sortIt);
-    console.log(sheetData);
     regenerateSheet();
   }
 }
