@@ -89,11 +89,6 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   this.addRow = function (index) {
     console.log('addRow at ' + index);
-    var sheet = document.querySelector('#sheet');
-    var rowAfter = document.querySelector('#'+ getRowId(index + 1));
-    var rowDOM = makeRowAtIndex(index)
-    sheet.insertBefore(rowDOM, rowAfter);
-
     currentRowCount += 1;
 
     // insert to array
@@ -104,14 +99,7 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   this.addColumn = function (index) {
     console.log('addColumn at ' + index);
-    var sheet = document.querySelector('#sheet');
-
     for (i = 0; i < currentRowCount; i++) {
-      var rowRef = document.querySelector('#' + getRowId(i));
-      var cellToInsertBefore = document.querySelector('#' + getCellId(i, index))
-      var cellToInsert = makeCellAtPos(i, index);
-      rowRef.insertBefore(cellToInsert, cellToInsertBefore);
-
       // init an empty value in every row at index
       sheetData[i].splice(index, 0, '');
     }
@@ -125,26 +113,18 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   this.removeRow = function (index) {
     console.log('removeRow at ' + index);
-    var rowRef = document.querySelector('#' + getRowId(index));
-    rowRef.remove();
-
     currentRowCount -= 1;
-
     sheetData.splice(index, 1);
-
     regenerateSheet();
   }
 
   this.removeColumn = function (index) {
     console.log('removeColumn at ' + index);
     for (i = 0; i < currentRowCount; i++) {
-      var cellRef = document.querySelector('#' + getCellId(i, index));
-      cellRef.remove();
       sheetData[i].splice(index, 1);
     }
 
     currentColumnCount -= 1;
-
     regenerateSheet();
   }
 
