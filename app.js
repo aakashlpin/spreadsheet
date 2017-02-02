@@ -11,8 +11,10 @@ function emptyNodeById (id) {
 function Sheet (appendAt, rowCount, columnCount) {
   var currentColumnCount = columnCount;
   var currentRowCount = rowCount;
+  var SHEET_ID = "sheet";
+  var SHEET_ID_SELECTOR = '#sheet';
   var sheetElement = document.createElement('div');
-  sheetElement.id = "sheet";
+  sheetElement.id = SHEET_ID;
   var i;
 
   function initializeData () {
@@ -58,16 +60,18 @@ function Sheet (appendAt, rowCount, columnCount) {
     return rowDOM;
   }
 
-  for (i = 0; i < currentRowCount; i++) {
-    sheetElement.appendChild(makeRowAtIndex(i));
+  function populateSheetElement () {
+    for (i = 0; i < currentRowCount; i++) {
+      sheetElement.appendChild(makeRowAtIndex(i));
+    }
   }
+
+  populateSheetElement();
 
   var container = document.querySelector(appendAt);
   container.appendChild(sheetElement);
 
-  var sheetParent = document.querySelector('#sheet');
-
-  sheetParent.addEventListener('change', function(e) {
+  document.querySelector(SHEET_ID_SELECTOR).addEventListener('change', function(e) {
     var target = e.target;
     var pos = target.id.split('-');
     var posX = Number(pos[1]);
@@ -81,10 +85,7 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   function regenerateSheet () {
     emptyNodeById('sheet');
-    var sheet = document.querySelector('#sheet');
-    for (i = 0; i < currentRowCount; i++) {
-      sheetElement.appendChild(makeRowAtIndex(i));
-    }
+    populateSheetElement();
   }
 
   this.addRow = function (index) {
