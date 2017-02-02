@@ -2,9 +2,6 @@ function Sheet (appendAt, rowCount, columnCount) {
   var currentColumnCount = columnCount;
   var currentRowCount = rowCount;
 
-  var sheetDOM = document.createElement('div');
-  sheetDOM.id = "sheet";
-
   var i;
 
   function initializeData () {
@@ -50,6 +47,8 @@ function Sheet (appendAt, rowCount, columnCount) {
     return rowDOM;
   }
 
+  var sheetDOM = document.createElement('div');
+  sheetDOM.id = "sheet";
   for (i = 0; i < currentRowCount; i++) {
     sheetDOM.appendChild(makeRowAtIndex(i));
   }
