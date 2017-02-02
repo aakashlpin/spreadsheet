@@ -158,35 +158,45 @@ var sheet = new Sheet('#container', 3, 2);
 var addRowForm = document.querySelector('#addRowAtIndexForm');
 addRowForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#addRowAtIndex').value;
+  var elem = document.querySelector('#addRowAtIndex');
+  var atIndex = elem.value;
+  elem.value = '';
   sheet.addRow(Number(atIndex));
 })
 
 var removeRowForm = document.querySelector('#removeRowAtIndexForm');
 removeRowForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#removeRowAtIndex').value;
+  var elem = document.querySelector('#removeRowAtIndex');
+  var atIndex = elem.value;
+  elem.value = '';
   sheet.removeRow(Number(atIndex));
 })
 
 var addColumnForm = document.querySelector('#addColumnAtIndexForm');
 addColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#addColumnAtIndex').value;
+  var elem = document.querySelector('#addColumnAtIndex');
+  var atIndex = elem.value;
+  elem.value = '';
   sheet.addColumn(Number(atIndex));
 })
 
 var removeColumnForm = document.querySelector('#removeColumnAtIndexForm');
 removeColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#removeColumnAtIndex').value;
+  var elem = document.querySelector('#removeColumnAtIndex')
+  var atIndex = elem.value;
+  elem.value = '';
   sheet.removeColumn(Number(atIndex));
 })
 
 var sortColumnForm = document.querySelector('#sortColumnAtIndexForm');
 sortColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var atIndex = document.querySelector('#sortColumnAtIndex').value;
+  var elem = document.querySelector('#sortColumnAtIndex');
+  var atIndex = elem.value;
+  elem.value = '';
   sheet.sortColumn(Number(atIndex));
 })
 
