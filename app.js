@@ -96,7 +96,10 @@ function Sheet (appendAt, rowCount, columnCount) {
 
     currentRowCount += 1;
 
-    // TODO need to reassign ids to all rows and cells now
+    // insert to array
+    // and regenerateSheet
+    sheetData.splice(index, 0, new Array(currentColumnCount));
+    regenerateSheet();
   }
 
   this.addColumn = function (index) {
@@ -108,9 +111,16 @@ function Sheet (appendAt, rowCount, columnCount) {
       var cellToInsertBefore = document.querySelector('#' + getCellId(i, index))
       var cellToInsert = makeCellAtPos(i, index);
       rowRef.insertBefore(cellToInsert, cellToInsertBefore);
+
+      // init an empty value in every row at index
+      sheetData[i].splice(index, 0, '');
     }
 
     currentColumnCount += 1;
+
+    // and regenerateSheet?
+    //
+    regenerateSheet();
   }
 
   this.removeRow = function (index) {
