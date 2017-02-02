@@ -6,12 +6,20 @@ function Sheet (appendAt, rowCount, columnCount) {
   sheetDOM.id = "sheet";
   var i;
 
+  function getCellId (x, y) {
+    return 'cell-' + x + '-' + y;
+  }
+
+  function getRowId (x) {
+    return "row-" + x;
+  }
+
   function makeCellAtPos (x, y) {
     var pos = x + '-' + y;
     var cell = document.createElement('input')
     cell.type = 'text';
     cell.value = pos;
-    cell.id = "cell-" + pos;
+    cell.id = getCellId(x, y);
 
     return cell;
   }
@@ -20,7 +28,7 @@ function Sheet (appendAt, rowCount, columnCount) {
     var j;
     var rowDOM = document.createElement('div');
     rowDOM.className="row";
-    rowDOM.id = "row-" + i;
+    rowDOM.id = getRowId(i);
 
     for (j = 0; j < currentColumnCount; j++) {
       var cell = makeCellAtPos(i, j);
@@ -40,7 +48,7 @@ function Sheet (appendAt, rowCount, columnCount) {
   this.addRow = function (index) {
     console.log('addRow at ' + index);
     var sheet = document.querySelector('#sheet');
-    var rowAfter = document.querySelector('#row-' + (index+1));
+    var rowAfter = document.querySelector('#'+ getRowId(index + 1));
     var rowDOM = makeRowAtIndex(index)
     sheet.insertBefore(rowDOM, rowAfter);
 
@@ -52,8 +60,8 @@ function Sheet (appendAt, rowCount, columnCount) {
     var sheet = document.querySelector('#sheet');
 
     for (i = 0; i < currentRowCount; i++) {
-      var rowRef = document.querySelector('#row-' + i);
-      var cellToInsertBefore = document.querySelector('#cell-' + i + '-' + index)
+      var rowRef = document.querySelector('#' + getRowId(i));
+      var cellToInsertBefore = document.querySelector('#' + getCellId(i, index))
       var cellToInsert = makeCellAtPos(i, index);
       rowRef.insertBefore(cellToInsert, cellToInsertBefore);
     }
@@ -63,7 +71,7 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   this.removeRow = function (index) {
     console.log('removeRow at ' + index);
-    var rowRef = document.querySelector('#row-' + index);
+    var rowRef = document.querySelector('#' + getRowId(index));
     rowRef.remove();
 
     currentRowCount -= 1;
@@ -72,7 +80,7 @@ function Sheet (appendAt, rowCount, columnCount) {
   this.removeColumn = function (index) {
     console.log('removeColumn at ' + index);
     for (i = 0; i < currentRowCount; i++) {
-      var cellRef = document.querySelector('#cell-' + i + '-' + index);
+      var cellRef = document.querySelector('#' + getCellId(i, index));
       cellRef.remove();
     }
 
