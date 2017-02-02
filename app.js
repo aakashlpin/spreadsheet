@@ -4,7 +4,19 @@ function Sheet (appendAt, rowCount, columnCount) {
 
   var sheetDOM = document.createElement('div');
   sheetDOM.id = "sheet";
+
   var i;
+
+  function initializeData () {
+    var arr = new Array(rowCount);
+    for (var i = 0; i< rowCount ; i++) {
+      arr[i] = new Array(columnCount);
+    }
+
+    return arr;
+  }
+
+  var sheetData = initializeData();
 
   function getCellId (x, y) {
     return 'cell-' + x + '-' + y;
@@ -18,7 +30,7 @@ function Sheet (appendAt, rowCount, columnCount) {
     var pos = x + '-' + y;
     var cell = document.createElement('input')
     cell.type = 'text';
-    cell.value = pos;
+    cell.value = sheetData[x][y] ? sheetData[x][y] : '';
     cell.id = getCellId(x, y);
 
     return cell;
@@ -38,12 +50,26 @@ function Sheet (appendAt, rowCount, columnCount) {
     return rowDOM;
   }
 
-  for (i = 0; i < rowCount; i++) {
+  for (i = 0; i < currentRowCount; i++) {
     sheetDOM.appendChild(makeRowAtIndex(i));
   }
 
   var container = document.querySelector(appendAt);
   container.appendChild(sheetDOM);
+
+  var sheetParent = document.querySelector('#sheet');
+
+  sheetParent.addEventListener('change', function(e) {
+    var target = e.target;
+    var pos = target.id.split('-');
+    var posX = Number(pos[1]);
+    var posY = Number(pos[2]);
+    var value = target.value;
+
+    sheetData[posX][posY] = !isNaN(value) ? Number(value) : value;
+
+    console.log('sheet data written at ' + posX + ', ' + posY);
+  })
 
   this.addRow = function (index) {
     console.log('addRow at ' + index);
@@ -53,6 +79,8 @@ function Sheet (appendAt, rowCount, columnCount) {
     sheet.insertBefore(rowDOM, rowAfter);
 
     currentRowCount += 1;
+
+    // TODO need to reassign ids to all rows and cells now
   }
 
   this.addColumn = function (index) {
@@ -86,9 +114,31 @@ function Sheet (appendAt, rowCount, columnCount) {
 
     currentColumnCount -= 1;
   }
+
+  function sortIt(a, b) {
+    if (a[0] === b[0]) {
+      return 0;
+    }
+    return (a[0] < b[0]) ? -1 : 1;
+  }
+
+  this.sortColumn = function (index) {
+    /**
+     * 20 XSY      10 ABC
+     * 10 ABC  =>  20 XSY
+     * 30 SUDO     30 SUDO
+     */
+    console.log('sortColumn at ' + index);
+    // could store the values in json, sort that
+    // then regenerate the HTML?
+    //
+
+    sheetData.sort(sortIt);
+    console.log(sheetData);
+  }
 }
 
-var sheet = new Sheet('#container', 10, 5);
+var sheet = new Sheet('#container', 3, 2);
 
 var addRowForm = document.querySelector('#addRowAtIndexForm');
 addRowForm.addEventListener('submit', function (e) {
@@ -116,6 +166,13 @@ removeColumnForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var atIndex = document.querySelector('#removeColumnAtIndex').value;
   sheet.removeColumn(Number(atIndex));
+})
+
+var sortColumnForm = document.querySelector('#sortColumnAtIndexForm');
+sortColumnForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var atIndex = document.querySelector('#sortColumnAtIndex').value;
+  sheet.sortColumn(Number(atIndex));
 })
 
 
